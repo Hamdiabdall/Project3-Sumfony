@@ -78,8 +78,8 @@ class FormationController extends AbstractController
         ]);
     }
 
-    #[Route('/nouvelle', name: 'formation_nouvelle')]
-    public function addF(Request $request, SluggerInterface $slugger): Response
+    #[Route('/nouvelle', name: 'app_formation_new')]
+    public function new(Request $request, SluggerInterface $slugger): Response
     {
         $formation = new Formation();
         $form = $this->createFormationForm($formation);
