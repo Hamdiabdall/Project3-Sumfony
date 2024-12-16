@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la formation{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1>{{ formation.titre }}</h1>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            {% if formation.image %}
+                <img src="{{ asset('uploads/formations/' ~ formation.image) }}" 
+                     alt="{{ formation.titre }}" 
+                     class="img-thumbnail mb-3" 
+                     style="max-width: 300px">
+            {% endif %}
+            
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Prix</th>
+                        <td>{{ formation.price }}</td>
+                    </tr>
+                    <tr>
+                        <th>Durée</th>
+                        <td>{{ formation.duree }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date de début</th>
+                        <td>{{ formation.beginAt ? formation.beginAt|date('Y-m-d') : '' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="mt-4">
+                <a href="{{ path('formation_modifier', {'id': formation.id}) }}" class="btn btn-warning me-2">Modifier</a>
+                <a href="{{ path('formation_liste') }}" class="btn btn-secondary">Retour à la liste</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

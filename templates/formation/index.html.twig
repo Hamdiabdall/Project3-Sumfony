@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des formations{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1>Liste des formations</h1>
+
+    <a href="{{ path('formation_nouvelle') }}" class="btn btn-primary mb-3">Ajouter une formation</a>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Titre</th>
+                <th>Prix</th>
+                <th>Durée</th>
+                <th>Date de début</th>
+                <th>Image</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for formation in formations %}
+            <tr>
+                <td>{{ formation.id }}</td>
+                <td>{{ formation.titre }}</td>
+                <td>{{ formation.price }}</td>
+                <td>{{ formation.duree }}</td>
+                <td>{{ formation.beginAt ? formation.beginAt|date('Y-m-d') : '' }}</td>
+                {% if formation.image %}
+                    <td><img src="{{ asset('uploads/formations/' ~ formation.image) }}" 
+                             alt="{{ formation.titre }}" 
+                             class="img-thumbnail" 
+                             style="max-width: 100px"></td>
+                {% else %}
+                    <td>Aucune image</td>
+                {% endif %}
+                <td>
+                    <a href="{{ path('formation_voir', {'id': formation.id}) }}" class="btn btn-sm btn-info me-2">Voir</a>
+                    <a href="{{ path('formation_modifier', {'id': formation.id}) }}" class="btn btn-sm btn-warning me-2">Modifier</a>
+                    <form method="post" action="{{ path('formation_supprimer', {'id': formation.id}) }}" style="display: inline-block">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ formation.id) }}">
+                        <button class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette formation ?')">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">Aucune formation trouvée</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %} 

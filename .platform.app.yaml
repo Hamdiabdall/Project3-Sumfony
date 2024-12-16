@@ -1,0 +1,30 @@
+name: app
+
+type: php:8.2
+
+relationships:
+    database: "database:mysql"
+
+disk: 512
+
+mounts:
+    "/public/uploads": "shared:files/uploads"
+
+web:
+    locations:
+        "/":
+            root: "public"
+            expires: 1h
+            passthru: "/index.php"
+
+dependencies:
+    php:
+        composer/composer: "^2"
+
+hooks:
+    build: |
+        set -e
+        composer install --no-dev --optimize-autoloader
+    deploy: |
+        set -e
+        php bin/console doctrine:migrations:migrate --no-interaction 

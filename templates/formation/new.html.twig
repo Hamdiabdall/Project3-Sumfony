@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle Formation{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1>Créer une nouvelle formation</h1>
+
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col-md-6">
+            {{ form_row(form.titre) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_row(form.price) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            {{ form_row(form.duree) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_row(form.begin_at) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            {{ form_row(form.image, {
+                'label': 'Image de la formation',
+                'attr': {
+                    'class': 'form-control',
+                    'accept': 'image/*'
+                }
+            }) }}
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <button class="btn btn-primary me-2">{{ button_label|default('Enregistrer') }}</button>
+        <a href="{{ path('formation_liste') }}" class="btn btn-secondary">Retour à la liste</a>
+    </div>
+    {{ form_end(form) }}
+</div>
+{% endblock %} 

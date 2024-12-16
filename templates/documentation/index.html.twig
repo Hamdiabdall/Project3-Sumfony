@@ -1,0 +1,113 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Documentation Upload Images{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Documentation : Upload d'Images dans Symfony</h1>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2 class="h5 mb-0">1. Configuration initiale</h2>
+        </div>
+        <div class="card-body">
+            <h3 class="h6">1.1 Configurer le dossier d'upload dans services.yaml</h3>
+            <pre class="bg-light p-3"><code>parameters:
+    formation_images_directory: '%kernel.project_dir%/public/uploads/formations'</code></pre>
+
+            <h3 class="h6 mt-4">1.2 Créer le dossier d'upload</h3>
+            <pre class="bg-light p-3"><code>mkdir -p public/uploads/formations
+chmod 777 public/uploads/formations  # En développement uniquement</code></pre>
+
+            <h3 class="h6 mt-4">1.3 Ajouter le dossier uploads dans .gitignore</h3>
+            <pre class="bg-light p-3"><code>/public/uploads/</code></pre>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2 class="h5 mb-0">2. Entité Formation</h2>
+        </div>
+        <div class="card-body">
+            <pre class="bg-light p-3"><code>class Formation
+{
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $image = null;
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
+        return $this;
+    }
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2 class="h5 mb-0">3. Formulaire dans le Controller</h2>
+        </div>
+        <div class="card-body">
+            <pre class="bg-light p-3"><code>private function createFormationForm(Formation $formation)
+{
+    return $this->createFormBuilder($formation)
+        ->add('image', FileType::class, [
+            'label' => 'Image',
+            'mapped' => false,
+            'required' => false,
+            'constraints' => [
+                new File([
+                    'maxSize' => '1024k',
+                    'mimeTypes' => [
+                        'image/jpeg',
+                        'image/png',
+                    ],
+                    'mimeTypesMessage' => 'Formats acceptés : JPEG ou PNG',
+                ])
+            ],
+            'attr' => [
+                'class' => 'form-control',
+                'accept' => 'image/*'
+            ]
+        ])
+        ->getForm();
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2 class="h5 mb-0">4. Points importants à retenir</h2>
+        </div>
+        <div class="card-body">
+            <h3 class="h6">Sécurité</h3>
+            <ul>
+                <li>Toujours valider les types de fichiers</li>
+                <li>Limiter la taille des fichiers</li>
+                <li>Générer des noms de fichiers uniques</li>
+                <li>Nettoyer les anciennes images</li>
+            </ul>
+
+            <h3 class="h6 mt-3">Configuration</h3>
+            <ul>
+                <li>Vérifier les permissions du dossier d'upload</li>
+                <li>Configurer correctement le .gitignore</li>
+                <li>Adapter la taille maximale dans php.ini si nécessaire</li>
+            </ul>
+
+            <h3 class="h6 mt-3">Bonnes pratiques</h3>
+            <ul>
+                <li>Utiliser le composant Slugger pour sécuriser les noms de fichiers</li>
+                <li>Gérer les erreurs d'upload</li>
+                <li>Nettoyer les fichiers orphelins</li>
+                <li>Valider les types MIME des fichiers</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier la formation{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1>Modifier la formation</h1>
+
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col-md-6">
+            {{ form_row(form.titre) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_row(form.price) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            {{ form_row(form.duree) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_row(form.begin_at) }}
+        </div>
+    </div>
+
+    {% if formation.image %}
+        <div class="mb-3">
+            <img src="{{ asset('uploads/formations/' ~ formation.image) }}" 
+                 alt="Current image" 
+                 class="img-thumbnail" 
+                 style="max-width: 200px">
+        </div>
+    {% endif %}
+    
+    {{ form_row(form.image, {
+        'label': 'Change image',
+        'attr': {
+            'class': 'form-control',
+            'accept': 'image/*'
+        }
+    }) }}
+
+    <div class="mt-4">
+        <button class="btn btn-primary me-2">{{ button_label|default('Mettre à jour') }}</button>
+        <a href="{{ path('formation_liste') }}" class="btn btn-secondary">Retour à la liste</a>
+    </div>
+    {{ form_end(form) }}
+</div>
+{% endblock %} 
